@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="hi" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Udhar Diary - Ultra Smart Fintech Ledger</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        indigo: { 600: '#4f46e5', 700: '#4338ca' },
+                        red: { 600: '#dc2626' },
+                        emerald: { 600: '#16a34a' }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { background-color: #030712; color: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 5px; }
+        .fintech-card { background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(255, 255, 255, 0.08); }
+    </style>
+</head>
+<body class="flex justify-center items-center min-h-screen bg-black p-0 sm:p-4">
+
+    <!-- Responsive App Container: Mobile Par Frame & Laptop Par Wide Web Dashboard -->
+    <div class="w-full max-w-md md:max-w-4xl h-[100vh] sm:h-[92vh] sm:rounded-3xl sm:border-4 sm:border-slate-800 bg-slate-950 flex flex-col justify-between relative overflow-hidden shadow-2xl transition-all duration-300">
+        
+        <!-- App Header -->
+        <header class="bg-indigo-600 text-white px-4 md:px-6 py-3 flex justify-between items-center shadow-lg z-30">
+            <div class="flex items-center space-x-3">
+                <button onclick="window.openProfileModal()" class="relative">
+                    <img id="shop-img-display" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="w-10 h-10 rounded-xl border border-white/30 object-cover bg-white/10 p-0.5">
+                    <span class="absolute -bottom-1 -right-1 bg-emerald-500 w-3 h-3 rounded-full border-2 border-indigo-600"></span>
+                </button>
+                <div class="cursor-pointer" onclick="window.openProfileModal()">
+                    <h1 class="text-sm md:text-base font-bold tracking-tight leading-none" id="shop-name-display">मेरी दुकान</h1>
+                    <p class="text-[10px] md:text-xs text-indigo-200 mt-0.5" id="owner-name-display">डिजिटल खाता बही</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-2">
+                <select id="lang-select" onchange="window.changeLanguage(this.value)" class="bg-indigo-700 text-white text-xs px-2.5 py-1.5 rounded-xl border border-indigo-400/40 focus:outline-none cursor-pointer font-medium shadow-inner">
+                    <option value="hi">हिंदी</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+        </header>
+
+        <!-- Main Workspace Area -->
+        <main class="flex-grow overflow-y-auto p-4 md:p-6 relative space-y-4">
+            
+            <!-- Auth Screen -->
+            <section id="auth-section" class="flex flex-col justify-center h-full py-2 max-w-md mx-auto">
+                <div class="fintech-card p-6 rounded-3xl shadow-2xl space-y-4">
+                    <div class="text-center">
+                        <div class="w-14 h-14 bg-indigo-600/20 text-indigo-400 rounded-2xl mx-auto flex items-center justify-center text-xl mb-2 border border-indigo-500/20">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <h2 id="auth-heading" class="text-lg font-bold text-slate-100">लॉगिन करें</h2>
+                        <p id="auth-subheading" class="text-xs text-slate-400">अपने डिजिटल बहीखाते में प्रवेश करें</p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div>
+                            <label class="text-[11px] font-medium text-slate-400 mb-1 block" id="lbl-auth-user">ईमेल / मोबाइल नंबर</label>
+                            <input type="text" id="auth-user" placeholder="username / 9876543210" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-100 focus:outline-none focus:border-indigo-600">
+                        </div>
+                        <div>
+                            <label class="text-[11px] font-medium text-slate-400 mb-1 block" id="lbl-auth-pass">पासवर्ड</label>
+                            <input type="password" id="auth-password" placeholder="••••••••" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-100 focus:outline-none focus:border-indigo-600">
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center text-xs pt-1">
+                        <button type="button" onclick="window.toggleAuthMode()" id="auth-toggle-btn" class="text-indigo-400 font-semibold hover:underline">नया खाता बनाएं</button>
+                    </div>
+
+                    <button type="button" id="auth-main-btn" onclick="window.handleAuth()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl text-xs font-bold shadow-lg shadow-indigo-600/30 transition">
+                        लॉगिन करें
+                    </button>
+                </div>
+            </section>
+
+            <!-- Dashboard Home -->
+            <div id="app-dashboard" class="hidden space-y-4">
+                
+                <!-- Active Counter Header -->
+                <div class="fintech-card rounded-2xl p-3.5 flex justify-between items-center shadow-md">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-indigo-600/20 text-indigo-400 rounded-xl flex items-center justify-center font-bold text-sm border border-indigo-500/30">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <div>
+                            <p class="text-[11px] text-slate-400" id="lbl-active-cust">कुल सक्रिय ग्राहक</p>
+                            <p id="active-cust-count" class="text-sm font-bold text-slate-100">0 Grahak</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Financial Summary Cards -->
+                <div class="grid grid-cols-2 gap-3.5">
+                    <div class="fintech-card p-4 rounded-2xl shadow-md border-l-4 border-l-red-600">
+                        <p class="text-[11px] md:text-xs text-slate-400 font-medium mb-1" id="lbl-total-udhar-title">कुल बकाया (Total Udhar)</p>
+                        <p id="total-udhar" class="text-xl font-extrabold text-red-500">₹0</p>
+                        <span class="text-[9px] md:text-[10px] text-red-400 bg-red-500/10 px-2 py-0.5 rounded mt-1 inline-block" id="lbl-udhar-sub">बाज़ार में फंसा पैसा</span>
+                    </div>
+                    <div class="fintech-card p-4 rounded-2xl shadow-md border-l-4 border-l-emerald-600">
+                        <p class="text-[11px] md:text-xs text-slate-400 font-medium mb-1" id="lbl-total-jama-title">कुल वसूली (Total Jama)</p>
+                        <p id="total-jama" class="text-xl font-extrabold text-emerald-500">₹0</p>
+                        <span class="text-[9px] md:text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded mt-1 inline-block" id="lbl-jama-sub">वसूल हो चुका</span>
+                    </div>
+                </div>
+
+                <!-- Search & Add Bar -->
+                <div class="flex space-x-2.5">
+                    <div class="relative flex-grow">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500"><i class="fa-solid fa-magnifying-glass text-xs"></i></span>
+                        <input type="text" id="search-box" oninput="window.filterCustomers()" placeholder="नाम, नंबर या एड्रेस से खोजें..." class="w-full bg-slate-900 border border-slate-800 rounded-xl pl-10 pr-3 py-3 text-xs text-slate-100 focus:outline-none focus:border-indigo-600">
+                    </div>
+                    <button onclick="window.openCustomerModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-3 rounded-xl text-xs font-bold whitespace-nowrap flex items-center gap-1.5 shadow-lg shadow-indigo-600/30 transition">
+                        <i class="fa-solid fa-user-plus text-xs"></i> <span id="btn-add-cust">नया ग्राहक</span>
+                    </button>
+                </div>
+
+                <!-- Customer Cards List -->
+                <div id="customer-list" class="space-y-2.5 pb-4"></div>
+            </div>
+
+            <!-- Customer Detail Ledger Screen -->
+            <div id="ledger-detail-view" class="hidden space-y-4">
+                
+                <div class="flex items-center justify-between fintech-card p-3.5 rounded-2xl">
+                    <button onclick="window.backToDashboard()" class="text-indigo-400 text-xs font-bold flex items-center gap-1.5 bg-indigo-600/10 px-3.5 py-2 rounded-xl border border-indigo-500/20 hover:bg-indigo-600/20 transition">
+                        <i class="fa-solid fa-arrow-left"></i> <span id="btn-back">वापस</span>
+                    </button>
+                    <div class="text-center">
+                        <h3 id="ledger-cust-name" class="text-sm md:text-base font-bold text-slate-100">Customer</h3>
+                        <p id="ledger-cust-phone" class="text-[11px] text-slate-400">Phone</p>
+                        <p id="ledger-cust-address" class="text-[10px] text-indigo-300 italic">Address</p>
+                    </div>
+                    <button onclick="window.deleteCurrentCustomer()" title="खाता डिलीट करें" class="text-red-400 hover:bg-red-500/20 p-2.5 rounded-xl border border-red-500/20 transition">
+                        <i class="fa-solid fa-trash-can text-sm"></i>
+                    </button>
+                </div>
+
+                <!-- Transaction Summary Banner -->
+                <div class="fintech-card p-4 rounded-2xl shadow-inner relative overflow-hidden">
+                    <div class="absolute top-3 right-3 bg-indigo-600/20 border border-indigo-500/30 text-indigo-300 px-2.5 py-1 rounded-lg text-[10px] font-bold">
+                        <span id="cust-trans-count">0 Txns</span> (<span id="cust-udhar-count" class="text-red-400">0 Udhar</span> / <span id="cust-jama-count" class="text-emerald-400">0 Jama</span>)
+                    </div>
+
+                    <p class="text-[11px] text-slate-400 mt-1" id="lbl-net-bal-title">कुल बकाया राशि (Net Balance)</p>
+                    <p id="ledger-net-balance" class="text-2xl md:text-3xl font-extrabold mt-1">₹0</p>
+                </div>
+
+                <!-- Udhar & Jama Buttons -->
+                <div class="grid grid-cols-2 gap-3.5">
+                    <button onclick="window.openEntryModal('udhar')" class="bg-red-600 hover:bg-red-700 text-white py-3.5 px-3 rounded-2xl text-xs font-bold shadow-lg shadow-red-600/30 flex items-center justify-center gap-1.5 transition">
+                        <i class="fa-solid fa-minus-circle text-sm"></i> <span id="btn-diya-label">₹ दिया (Udhar)</span>
+                    </button>
+                    <button onclick="window.openEntryModal('jama')" class="bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 px-3 rounded-2xl text-xs font-bold shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-1.5 transition">
+                        <i class="fa-solid fa-plus-circle text-sm"></i> <span id="btn-liya-label">₹ लिया (Jama)</span>
+                    </button>
+                </div>
+
+                <!-- WhatsApp Messaging System (3 Buttons Inside) -->
+                <div class="fintech-card p-3.5 rounded-2xl space-y-2.5">
+                    <p class="text-[11px] text-slate-400 font-semibold" id="lbl-wa-alerts"><i class="fa-brands fa-whatsapp text-emerald-400 mr-1 text-sm"></i> व्हाट्सएप ऑटो अलर्ट्स</p>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="window.sendWhatsAppEntrySlip()" class="bg-indigo-600/20 text-indigo-300 border border-indigo-500/30 py-2.5 rounded-xl text-[10px] md:text-[11px] font-bold flex items-center justify-center gap-1 hover:bg-indigo-600/30 transition">
+                            <i class="fa-solid fa-paper-plane text-xs"></i> <span id="btn-wa-entry">Entry Slip</span>
+                        </button>
+                        <button onclick="window.sendWhatsAppReminder()" class="bg-emerald-600/20 text-emerald-300 border border-emerald-500/30 py-2.5 rounded-xl text-[10px] md:text-[11px] font-bold flex items-center justify-center gap-1 hover:bg-emerald-600/30 transition">
+                            <i class="fa-solid fa-bell text-xs"></i> <span id="btn-wa-rem">Reminder</span>
+                        </button>
+                        <button onclick="window.sendWhatsAppThankYou()" class="bg-purple-600/20 text-purple-300 border border-purple-500/30 py-2.5 rounded-xl text-[10px] md:text-[11px] font-bold flex items-center justify-center gap-1 hover:bg-purple-600/30 transition">
+                            <i class="fa-solid fa-heart text-xs"></i> <span id="btn-wa-ty">Thank You</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Transaction History -->
+                <div class="space-y-2 pt-2">
+                    <div class="flex justify-between items-center px-1">
+                        <h4 class="text-xs font-bold text-slate-400" id="lbl-trans-hist">खाता विवरण (Transactions)</h4>
+                        <span class="text-[9px] text-slate-500" id="lbl-del-hint">डिलीट करने के लिए आइकॉन दबाएं</span>
+                    </div>
+                    <div id="ledger-entries-list" class="space-y-2"></div>
+                </div>
+            </div>
+
+            <!-- Tab: Analytics Graph -->
+            <div id="tab-analytics" class="hidden space-y-3.5">
+                <div class="fintech-card p-4 rounded-2xl space-y-3">
+                    <h3 class="text-xs font-bold text-indigo-400 flex items-center gap-1.5"><i class="fa-solid fa-chart-column"></i> <span id="lbl-graph-title">महीनेवार व्यापार ग्राफ (Monthly Analytics)</span></h3>
+                    <p class="text-[11px] text-slate-400" id="lbl-graph-desc">3 Bars: Total Udhar (Red), Total Jama (Green), Total Baaki (Yellow)</p>
+                    <div class="w-full h-64">
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Settings & Data Backup -->
+            <div id="tab-settings" class="hidden space-y-3.5">
+                <div class="fintech-card p-4 rounded-2xl space-y-3">
+                    <h3 class="text-xs font-bold text-indigo-400 flex items-center gap-1.5"><i class="fa-solid fa-database"></i> <span id="lbl-backup-title">बैकअप और सुरक्षा</span></h3>
+                    <p class="text-[11px] text-slate-400" id="lbl-backup-desc">अपना पूरा बहीखाता डेटा सुरक्षित एक्सपोर्ट या रिस्टोर करें:</p>
+                    <div class="flex gap-2.5">
+                        <button onclick="window.exportBackup()" class="w-1/2 bg-slate-800 hover:bg-slate-700 text-slate-200 py-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5"><i class="fa-solid fa-download"></i> Export Data</button>
+                        <button onclick="document.getElementById('import-file').click()" class="w-1/2 bg-slate-800 hover:bg-slate-700 text-slate-200 py-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5"><i class="fa-solid fa-upload"></i> Restore Data</button>
+                        <input type="file" id="import-file" class="hidden" onchange="window.importBackup(event)">
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav id="bottom-nav" class="hidden fintech-card border-t border-slate-800/80 py-2.5 px-6 flex justify-around items-center z-40">
+            <button onclick="window.switchTab('home')" id="nav-home" class="text-indigo-500 flex flex-col items-center text-[10px] font-semibold gap-0.5"><i class="fa-solid fa-house text-base"></i><span id="nav-lbl-home">होम</span></button>
+            <button onclick="window.switchTab('analytics')" id="nav-analytics" class="text-slate-400 hover:text-slate-200 flex flex-col items-center text-[10px] font-medium gap-0.5"><i class="fa-solid fa-chart-line text-base"></i><span id="nav-lbl-graph">रिपोर्ट्स ग्राफ</span></button>
+            <button onclick="window.switchTab('settings')" id="nav-settings" class="text-slate-400 hover:text-slate-200 flex flex-col items-center text-[10px] font-medium gap-0.5"><i class="fa-solid fa-gear text-base"></i><span id="nav-lbl-set">सेटिंग्स</span></button>
+        </nav>
+
+    </div>
+
+    <!-- Modal: Profile & Shop Details (Contains Logout Button) -->
+    <div id="profile-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+        <div class="fintech-card w-full max-w-sm rounded-3xl p-5 shadow-2xl space-y-3">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                <h3 class="text-sm font-bold text-slate-100 flex items-center gap-1.5"><i class="fa-solid fa-store text-indigo-500"></i> <span id="lbl-prof-modal-title">दुकान प्रोफाइल सेटिंग्स</span></h3>
+                <button onclick="window.closeProfileModal()" class="text-slate-400 hover:text-white p-1"><i class="fa-solid fa-xmark text-sm"></i></button>
+            </div>
+            <div>
+                <label class="text-[11px] text-slate-400 mb-1 block" id="lbl-prof-shop">दुकान का नाम</label>
+                <input type="text" id="p-shop-name" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-100">
+            </div>
+            <div>
+                <label class="text-[11px] text-slate-400 mb-1 block" id="lbl-prof-owner">दुकानदार का नाम</label>
+                <input type="text" id="p-owner-name" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-100">
+            </div>
+            <div>
+                <label class="text-[11px] text-slate-400 mb-1 block" id="lbl-prof-img">प्रोफाइल फोटो / लोगो URL</label>
+                <input type="text" id="p-img-url" placeholder="https://..." class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-100">
+            </div>
+            <div class="flex space-x-2.5 pt-1">
+                <button onclick="window.closeProfileModal()" class="w-1/2 bg-slate-800 text-slate-200 py-3 rounded-xl text-xs font-semibold" id="btn-prof-cancel">रद्द करें</button>
+                <button onclick="window.saveProfileDetails()" class="w-1/2 bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl text-xs font-bold shadow-md" id="btn-prof-save">अपडेट करें</button>
+            </div>
+            <div class="pt-3 border-t border-slate-800">
+                <button onclick="window.logoutUser()" class="w-full bg-red-600/10 hover:bg-red-600/20 text-red-400 border border-red-500/20 py-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition">
+                    <i class="fa-solid fa-power-off"></i> <span id="lbl-logout-btn">खाते से लॉगआउट करें</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Add New Customer -->
+    <div id="cust-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+        <div class="fintech-card w-full max-w-sm rounded-3xl p-5 shadow-2xl space-y-3">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                <h3 class="text-sm font-bold text-slate-100 flex items-center gap-1.5"><i class="fa-solid fa-user-plus text-indigo-500"></i> <span id="lbl-cust-modal-title">नया ग्राहक जोड़ें</span></h3>
+                <button onclick="window.closeCustomerModal()" class="text-slate-400 hover:text-white p-1"><i class="fa-solid fa-xmark text-sm"></i></button>
+            </div>
+            <div>
+                <label class="text-[11px] text-slate-400 mb-1 block" id="lbl-c-name">ग्राहक का नाम</label>
+                <input type="text" id="c-name" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-100 focus:outline-none focus:border-indigo-600">
+            </div>
+            <div>
+                <label class="text-[11px] text-slate-400 mb-1 block" id="lbl-c-phone">ग्राहक का मोबाइल नंबर</label>
+                <input type="tel" id="c-phone" maxlength="10" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-100 focus:outline-none focus:border-indigo-600">
+            </div>
+            <div>
+                <label class="text-[11px] text-slate-400 mb-1 block" id="lbl-c-addr">ग्राहक का पता</label>
+                <input type="text" id="c-address" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-100 focus:outline-none focus:border-indigo-600">
+            </div>
+            <div class="flex space-x-2.5 pt-2">
+                <button onclick="window.closeCustomerModal()" class="w-1/2 bg-slate-800 text-slate-200 py-3 rounded-xl text-xs font-semibold" id="btn-cust-cancel">रद्द करें</button>
+                <button onclick="window.saveCustomer()" class="w-1/2 bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl text-xs font-bold shadow-md" id="btn-cust-save">सेव करें</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Udhar / Jama Transaction Entry -->
+    <div id="entry-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+        <div class="fintech-card w-full max-w-sm rounded-3xl p-5 shadow-2xl space-y-3">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                <h3 id="entry-modal-title" class="text-sm font-bold text-slate-100">एंट्री करें</h3>
+                <button onclick="window.closeEntryModal()" class="text-slate-400 hover:text-white p-1"><i class="fa-solid fa-xmark text-sm"></i></button>
+            </div>
+            <div>
+                <label class="text-[11px] text-slate-400 mb-1 block" id="lbl-entry-amt">रकम (₹)</label>
+                <input type="number" id="e-amount" placeholder="उदा. 500" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-100 focus:outline-none focus:border-indigo-600">
+            </div>
+            <div>
+                <label class="text-[11px] text-slate-400 mb-1 block" id="lbl-entry-desc">विवरण (Description)</label>
+                <input type="text" id="e-desc" placeholder="उदा. राशन, नकद" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-100 focus:outline-none focus:border-indigo-600">
+            </div>
+            <div class="flex space-x-2.5 pt-2">
+                <button onclick="window.closeEntryModal()" class="w-1/2 bg-slate-800 text-slate-200 py-3 rounded-xl text-xs font-semibold" id="btn-entry-cancel">रद्द करें</button>
+                <button onclick="window.saveLedgerEntry()" class="w-1/2 py-3 rounded-xl text-xs font-bold text-white shadow-md" id="btn-entry-save">Add Entry</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- App Logic Scripts -->
+    <script>
+        let currentUser = JSON.parse(localStorage.getItem('udhar_user')) || null;
+        let shopProfile = JSON.parse(localStorage.getItem('udhar_profile')) || { name: 'मेरी दुकान', owner: 'श्रीकांत वर्मा', img: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png' };
+        let customers = JSON.parse(localStorage.getItem('udhar_db_cust')) || [];
+        let activeCustomerId = null;
+        let entryType = 'udhar';
+        let chartInstance = null;
+
+        window.toggleAuthMode = function() {
+            const btn = document.getElementById('auth-toggle-btn');
+            const isSign = btn.innerText.includes("नया") || btn.innerText.includes("Create");
+            if(isSign) {
+                document.getElementById('auth-heading').innerText = "नया खाता बनाएं";
+                btn.innerText = "पहले से खाता है? लॉगिन करें";
+                document.getElementById('auth-main-btn').innerText = "Sign Up करें";
+            } else {
+                document.getElementById('auth-heading').innerText = "लॉगिन करें";
+                btn.innerText = "नया खाता बनाएं";
+                document.getElementById('auth-main-btn').innerText = "लॉगिन करें";
+            }
+        };
+
+        window.handleAuth = function() {
+            const user = document.getElementById('auth-user').value.trim();
+            const pass = document.getElementById('auth-password').value.trim();
+            if(!user || !pass) { alert('कृपया नाम और पासवर्ड दर्ज करें'); return; }
+
+            currentUser = { username: user };
+            localStorage.setItem('udhar_user', JSON.stringify(currentUser));
+            window.checkSession();
+        };
+
+        window.checkSession = function() {
+            if(currentUser) {
+                document.getElementById('auth-section').classList.add('hidden');
+                document.getElementById('app-dashboard').classList.remove('hidden');
+                document.getElementById('bottom-nav').classList.remove('hidden');
+                window.updateProfileDisplay();
+                window.renderDashboard();
+            } else {
+                document.getElementById('auth-section').classList.remove('hidden');
+                document.getElementById('app-dashboard').classList.add('hidden');
+                document.getElementById('bottom-nav').classList.add('hidden');
+            }
+        };
+
+        window.updateProfileDisplay = function() {
+            document.getElementById('shop-name-display').innerText = shopProfile.name;
+            document.getElementById('owner-name-display').innerText = shopProfile.owner;
+            if(shopProfile.img) document.getElementById('shop-img-display').src = shopProfile.img;
+        };
+
+        window.openProfileModal = function() {
+            document.getElementById('p-shop-name').value = shopProfile.name;
+            document.getElementById('p-owner-name').value = shopProfile.owner;
+            document.getElementById('p-img-url').value = shopProfile.img || '';
+            document.getElementById('profile-modal').classList.remove('hidden');
+        };
+
+        window.closeProfileModal = function() { document.getElementById('profile-modal').classList.add('hidden'); };
+
+        window.saveProfileDetails = function() {
+            shopProfile.name = document.getElementById('p-shop-name').value.trim() || 'मेरी दुकान';
+            shopProfile.owner = document.getElementById('p-owner-name').value.trim() || 'मालिक';
+            shopProfile.img = document.getElementById('p-img-url').value.trim() || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
+            localStorage.setItem('udhar_profile', JSON.stringify(shopProfile));
+            window.updateProfileDisplay();
+            window.closeProfileModal();
+        };
+
+        window.logoutUser = function() {
+            localStorage.removeItem('udhar_user');
+            currentUser = null;
+            location.reload();
+        };
+
+        window.renderDashboard = function() {
+            const listEl = document.getElementById('customer-list');
+            listEl.innerHTML = '';
+            let totalU = 0, totalJ = 0;
+
+            document.getElementById('active-cust-count').innerText = `${customers.length} Grahak`;
+
+            if(customers.length > 0) {
+                customers.forEach(c => {
+                    let netBal = 0;
+                    if(c.entries) {
+                        c.entries.forEach(e => {
+                            if(e.type === 'udhar') netBal += Number(e.amount);
+                            else netBal -= Number(e.amount);
+                        });
+                    }
+
+                    if(netBal > 0) totalU += netBal;
+                    if(netBal < 0) totalJ += Math.abs(netBal);
+
+                    listEl.innerHTML += `
+                        <div onclick="window.openCustomerLedger('${c.id}')" class="fintech-card p-3.5 rounded-2xl flex justify-between items-center cursor-pointer hover:border-indigo-600 transition shadow-sm">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-indigo-600/10 text-indigo-400 rounded-xl flex items-center justify-center font-bold text-xs border border-indigo-500/20">
+                                    ${c.name.charAt(0).toUpperCase()}
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-xs md:text-sm text-slate-100">${c.name}</h4>
+                                    <p class="text-[10px] text-slate-400"><i class="fa-solid fa-phone text-[8px] mr-1"></i>${c.phone}</p>
+                                    <p class="text-[9px] text-indigo-300 italic truncate max-w-[140px]">${c.address || 'Address N/A'}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs md:text-sm font-bold ${netBal >= 0 ? 'text-red-500' : 'text-emerald-500'}">₹${netBal}</p>
+                                <span class="text-[9px] text-slate-400">${netBal >= 0 ? 'उधार (बाकी)' : 'जमा (अग्रिम)'}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                listEl.innerHTML = `
+                    <div class="text-center py-12 fintech-card rounded-2xl">
+                        <i class="fa-solid fa-address-book text-slate-600 text-3xl mb-2"></i>
+                        <p class="text-xs text-slate-400">कोई ग्राहक खाता मौजूद नहीं है।</p>
+                    </div>
+                `;
+            }
+
+            document.getElementById('total-udhar').innerText = `₹${totalU}`;
+            document.getElementById('total-jama').innerText = `₹${totalJ}`;
+        };
+
+        window.filterCustomers = function() {
+            const q = document.getElementById('search-box').value.toLowerCase();
+            const filtered = customers.filter(c => c.name.toLowerCase().includes(q) || c.phone.includes(q) || (c.address && c.address.toLowerCase().includes(q)));
+            const listEl = document.getElementById('customer-list');
+            listEl.innerHTML = '';
+            filtered.forEach(c => {
+                let netBal = 0;
+                if(c.entries) c.entries.forEach(e => netBal += (e.type === 'udhar' ? Number(e.amount) : -Number(e.amount)));
+                listEl.innerHTML += `
+                    <div onclick="window.openCustomerLedger('${c.id}')" class="fintech-card p-3.5 rounded-2xl flex justify-between items-center cursor-pointer shadow-sm">
+                        <div>
+                            <h4 class="font-bold text-xs text-slate-100">${c.name}</h4>
+                            <p class="text-[10px] text-slate-400">${c.phone}</p>
+                        </div>
+                        <p class="text-xs font-bold ${netBal >= 0 ? 'text-red-500' : 'text-emerald-500'}">₹${netBal}</p>
+                    </div>
+                `;
+            });
+        };
+
+        window.openCustomerModal = function() { document.getElementById('cust-modal').classList.remove('hidden'); };
+        window.closeCustomerModal = function() { document.getElementById('cust-modal').classList.add('hidden'); };
+
+        window.saveCustomer = function() {
+            const name = document.getElementById('c-name').value.trim();
+            const phone = document.getElementById('c-phone').value.trim();
+            const address = document.getElementById('c-address').value.trim();
+
+            if(!name) { alert('कृपया ग्राहक का नाम भरें'); return; }
+
+            const newCust = {
+                id: Date.now().toString(),
+                name: name,
+                phone: phone || 'N/A',
+                address: address || 'पता दर्ज नहीं है',
+                entries: []
+            };
+
+            customers.push(newCust);
+            localStorage.setItem('udhar_db_cust', JSON.stringify(customers));
+            window.closeCustomerModal();
+            document.getElementById('c-name').value = '';
+            document.getElementById('c-phone').value = '';
+            document.getElementById('c-address').value = '';
+            window.renderDashboard();
+        };
+
+        window.deleteCurrentCustomer = function() {
+            const cust = customers.find(c => c.id === activeCustomerId);
+            if(!cust) return;
+
+            if(confirm(`क्या आप सच में "${cust.name}" का खाता डिलीट करना चाहते हैं?`)) {
+                customers = customers.filter(c => c.id !== activeCustomerId);
+                localStorage.setItem('udhar_db_cust', JSON.stringify(customers));
+                alert('खाता डिलीट हो गया!');
+                window.backToDashboard();
+            }
+        };
+
+        window.openCustomerLedger = function(id) {
+            activeCustomerId = id;
+            document.getElementById('app-dashboard').classList.add('hidden');
+            document.getElementById('ledger-detail-view').classList.remove('hidden');
+            window.renderLedgerDetail();
+        };
+
+        window.backToDashboard = function() {
+            document.getElementById('ledger-detail-view').classList.add('hidden');
+            document.getElementById('app-dashboard').classList.remove('hidden');
+            window.renderDashboard();
+        };
+
+        window.renderLedgerDetail = function() {
+            const cust = customers.find(c => c.id === activeCustomerId);
+            if(!cust) return;
+
+            document.getElementById('ledger-cust-name').innerText = cust.name;
+            document.getElementById('ledger-cust-phone').innerText = cust.phone;
+            document.getElementById('ledger-cust-address').innerText = cust.address || 'Address N/A';
+
+            let netBal = 0;
+            let udharCount = 0, jamaCount = 0;
+            const entriesList = document.getElementById('ledger-entries-list');
+            entriesList.innerHTML = '';
+
+            if(cust.entries && cust.entries.length > 0) {
+                cust.entries.slice().reverse().forEach(e => {
+                    if(e.type === 'udhar') { netBal += Number(e.amount); udharCount++; }
+                    else { netBal -= Number(e.amount); jamaCount++; }
+
+                    entriesList.innerHTML += `
+                        <div class="fintech-card p-3 rounded-xl flex justify-between items-center text-xs">
+                            <div>
+                                <p class="font-semibold text-slate-200">${e.desc || 'सामान्य एंट्री'}</p>
+                                <p class="text-[9px] text-slate-400">${e.date}</p>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <div class="text-right">
+                                    <p class="font-bold ${e.type === 'udhar' ? 'text-red-500' : 'text-emerald-500'}">${e.type === 'udhar' ? '+' : '-'}₹${e.amount}</p>
+                                    <span class="text-[9px] text-slate-400 uppercase">${e.type}</span>
+                                </div>
+                                <button onclick="window.deleteSingleEntry('${e.id}')" title="एंट्री डिलीट करें" class="text-slate-500 hover:text-red-400 p-1.5 rounded-lg transition">
+                                    <i class="fa-solid fa-trash-can text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                entriesList.innerHTML = '<p class="text-xs text-slate-500 text-center py-6">कोई लेन-देन नहीं है।</p>';
+            }
+
+            document.getElementById('cust-trans-count').innerText = `${cust.entries ? cust.entries.length : 0} Txns`;
+            document.getElementById('cust-udhar-count').innerText = `${udharCount} Udhar`;
+            document.getElementById('cust-jama-count').innerText = `${jamaCount} Jama`;
+
+            const balEl = document.getElementById('ledger-net-balance');
+            balEl.innerText = `₹${Math.abs(netBal)} ${netBal >= 0 ? '(बाकी उधार)' : '(जमा राशि)'}`;
+            balEl.className = `text-2xl md:text-3xl font-extrabold mt-1 ${netBal >= 0 ? 'text-red-500' : 'text-emerald-500'}`;
+        };
+
+        window.deleteSingleEntry = function(entryId) {
+            const cust = customers.find(c => c.id === activeCustomerId);
+            if(!cust || !cust.entries) return;
+
+            if(confirm("क्या आप इस गलत एंट्री को हटाना चाहते हैं?")) {
+                cust.entries = cust.entries.filter(e => e.id !== entryId);
+                localStorage.setItem('udhar_db_cust', JSON.stringify(customers));
+                window.renderLedgerDetail();
+            }
+        };
+
+        window.openEntryModal = function(type) {
+            entryType = type;
+            document.getElementById('entry-modal').classList.remove('hidden');
+            const titleEl = document.getElementById('entry-modal-title');
+            const saveBtn = document.getElementById('btn-entry-save');
+            if(type === 'udhar') {
+                titleEl.innerText = "₹ दिया / उधार एंट्री (Udhar)";
+                saveBtn.className = "w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl text-xs font-bold shadow-md";
+                saveBtn.innerText = "Add Udhar";
+            } else {
+                titleEl.innerText = "₹ लिया / जमा एंट्री (Jama)";
+                saveBtn.className = "w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl text-xs font-bold shadow-md";
+                saveBtn.innerText = "Add Jama";
+            }
+        };
+
+        window.closeEntryModal = function() { document.getElementById('entry-modal').classList.add('hidden'); };
+
+        window.saveLedgerEntry = function() {
+            const amount = parseFloat(document.getElementById('e-amount').value);
+            const desc = document.getElementById('e-desc').value.trim();
+            if(!amount || amount <= 0) { alert('कृपया सही रकम दर्ज करें'); return; }
+
+            const cust = customers.find(c => c.id === activeCustomerId);
+            if(!cust) return;
+
+            if(!cust.entries) cust.entries = [];
+            
+            const newEntry = {
+                id: Date.now().toString(),
+                type: entryType,
+                amount: amount,
+                desc: desc || (entryType === 'udhar' ? 'उधार सामान' : 'नकद भुगतान'),
+                date: new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
+            };
+            
+            cust.entries.push(newEntry);
+            localStorage.setItem('udhar_db_cust', JSON.stringify(customers));
+            window.closeEntryModal();
+            document.getElementById('e-amount').value = '';
+            document.getElementById('e-desc').value = '';
+
+            window.renderLedgerDetail();
+        };
+
+        // WhatsApp Entry Slip Alert Button
+        window.sendWhatsAppEntrySlip = function() {
+            const cust = customers.find(c => c.id === activeCustomerId);
+            if(!cust || !cust.phone) { alert('ग्राहक का फोन नंबर उपलब्ध नहीं है!'); return; }
+            if(!cust.entries || cust.entries.length === 0) { alert('कोई एंट्री मौजूद नहीं है!'); return; }
+
+            const lastEntry = cust.entries[cust.entries.length - 1];
+            let netTotal = 0;
+            cust.entries.forEach(e => netTotal += (e.type === 'udhar' ? Number(e.amount) : -Number(e.amount)));
+
+            const typeText = lastEntry.type === 'udhar' ? 'Udhar (दिया)' : 'Jama (लिया)';
+            const msg = `Namaste ${cust.name} ji, Aapke khate mein Nayi Entry Add hui hai.\n\nType: ${typeText}\nAmount: Rs.${lastEntry.amount}\nDetails: ${lastEntry.desc}\n\n*Total Net Balance: Rs.${netTotal}*\n\nDhanyawad!\n-${shopProfile.name}`;
+            window.open(`https://wa.me/91${cust.phone}?text=${encodeURIComponent(msg)}`, '_blank');
+        };
+
+        // WhatsApp Reminders
+        window.sendWhatsAppReminder = function() {
+            const cust = customers.find(c => c.id === activeCustomerId);
+            if(!cust || !cust.phone) { alert('ग्राहक का फोन नंबर उपलब्ध नहीं है!'); return; }
+
+            let netBal = 0;
+            if(cust.entries) cust.entries.forEach(e => netBal += (e.type === 'udhar' ? Number(e.amount) : -Number(e.amount)));
+
+            if(netBal <= 0) { alert('इस ग्राहक पर कोई उधार बाकी नहीं है!'); return; }
+
+            const msg = `Namaste ${cust.name} ji, ${shopProfile.name} ke anusar aapka kul Rs.${netBal} baaki hai. Kripya dukaan par aakar payment kar dein. Dhanyawad!`;
+            window.open(`https://wa.me/91${cust.phone}?text=${encodeURIComponent(msg)}`, '_blank');
+        };
+
+        window.sendWhatsAppThankYou = function() {
+            const cust = customers.find(c => c.id === activeCustomerId);
+            if(!cust || !cust.phone) { alert('ग्राहक का फोन नंबर उपलब्ध नहीं है!'); return; }
+
+            const msg = `Namaste ${cust.name} ji, Payment receive karne ke liye Dhanyawad! Aapka hisab safal hone par hum aabhari hain. Dobara sewa ka mauka dein!\n-${shopProfile.name}`;
+            window.open(`https://wa.me/91${cust.phone}?text=${encodeURIComponent(msg)}`, '_blank');
+        };
+
+        window.switchTab = function(tab) {
+            document.getElementById('app-dashboard').classList.add('hidden');
+            document.getElementById('ledger-detail-view').classList.add('hidden');
+            document.getElementById('tab-analytics').classList.add('hidden');
+            document.getElementById('tab-settings').classList.add('hidden');
+
+            document.getElementById('nav-home').className = "text-slate-400 hover:text-slate-200 flex flex-col items-center text-[10px] font-medium gap-0.5";
+            document.getElementById('nav-analytics').className = "text-slate-400 hover:text-slate-200 flex flex-col items-center text-[10px] font-medium gap-0.5";
+            document.getElementById('nav-settings').className = "text-slate-400 hover:text-slate-200 flex flex-col items-center text-[10px] font-medium gap-0.5";
+
+            if(tab === 'home') {
+                document.getElementById('app-dashboard').classList.remove('hidden');
+                document.getElementById('nav-home').className = "text-indigo-500 flex flex-col items-center text-[10px] font-semibold gap-0.5";
+            }
+            else if(tab === 'analytics') {
+                document.getElementById('tab-analytics').classList.remove('hidden');
+                document.getElementById('nav-analytics').className = "text-indigo-500 flex flex-col items-center text-[10px] font-semibold gap-0.5";
+                window.renderAnalyticsChart();
+            }
+            else if(tab === 'settings') {
+                document.getElementById('tab-settings').classList.remove('hidden');
+                document.getElementById('nav-settings').className = "text-indigo-500 flex flex-col items-center text-[10px] font-semibold gap-0.5";
+            }
+        };
+
+        window.renderAnalyticsChart = function() {
+            const ctx = document.getElementById('monthlyChart').getContext('2d');
+            if(chartInstance) chartInstance.destroy();
+
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [
+                        { label: 'Total Udhar', data: [1500, 2200, 3100, 2800, 2100, 3500, 4200, 2900, 3800, 4500, 0, 0], backgroundColor: '#dc2626' },
+                        { label: 'Total Jama', data: [1000, 1800, 2500, 2200, 1900, 3000, 3800, 2400, 3200, 3900, 0, 0], backgroundColor: '#16a34a' },
+                        { label: 'Total Baaki', data: [500, 400, 600, 600, 200, 500, 400, 500, 600, 600, 0, 0], backgroundColor: '#eab308' }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#9ca3af', font: { size: 10 } } } },
+                    scales: {
+                        x: { ticks: { color: '#9ca3af', font: { size: 9 } } },
+                        y: { ticks: { color: '#9ca3af', font: { size: 9 } } }
+                    }
+                }
+            });
+        };
+
+        window.exportBackup = function() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ customers, shopProfile }));
+            const dl = document.createElement('a');
+            dl.setAttribute("href", dataStr);
+            dl.setAttribute("download", "udhar_diary_complete_backup.json");
+            document.body.appendChild(dl);
+            dl.click();
+            dl.remove();
+        };
+
+        window.importBackup = function(event) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const data = JSON.parse(e.target.result);
+                if(data.customers) {
+                    customers = data.customers;
+                    if(data.shopProfile) shopProfile = data.shopProfile;
+                    localStorage.setItem('udhar_db_cust', JSON.stringify(customers));
+                    localStorage.setItem('udhar_profile', JSON.stringify(shopProfile));
+                    window.updateProfileDisplay();
+                    window.renderDashboard();
+                    alert("डेटा सफलतापूर्वक रिस्टोर हो गया!");
+                }
+            };
+            reader.readAsText(event.target.files[0]);
+        };
+
+        // Complete Language Switcher
+        window.changeLanguage = function(lang) {
+            if(lang === 'hi') {
+                document.getElementById('lbl-auth-user').innerText = "ईमेल / मोबाइल नंबर";
+                document.getElementById('lbl-auth-pass').innerText = "पासवर्ड";
+                document.getElementById('lbl-active-cust').innerText = "कुल सक्रिय ग्राहक";
+                document.getElementById('lbl-total-udhar-title').innerText = "कुल बकाया (Total Udhar)";
+                document.getElementById('lbl-total-jama-title').innerText = "कुल वसूली (Total Jama)";
+                document.getElementById('btn-add-cust').innerText = "नया ग्राहक";
+                document.getElementById('btn-back').innerText = "वापस";
+                document.getElementById('lbl-net-bal-title').innerText = "कुल बकाया राशि (Net Balance)";
+                document.getElementById('btn-diya-label').innerText = "₹ दिया (Udhar)";
+                document.getElementById('btn-liya-label').innerText = "₹ लिया (Jama)";
+                document.getElementById('btn-wa-entry').innerText = "Entry Slip";
+                document.getElementById('btn-wa-rem').innerText = "Reminder";
+                document.getElementById('btn-wa-ty').innerText = "Thank You";
+                document.getElementById('nav-lbl-home').innerText = "होम";
+                document.getElementById('nav-lbl-graph').innerText = "रिपोर्ट्स ग्राफ";
+                document.getElementById('nav-lbl-set').innerText = "सेटिंग्स";
+                document.getElementById('lbl-cust-modal-title').innerText = "नया ग्राहक जोड़ें";
+                document.getElementById('lbl-c-name').innerText = "ग्राहक का नाम";
+                document.getElementById('lbl-c-phone').innerText = "ग्राहक का मोबाइल नंबर";
+                document.getElementById('lbl-c-addr').innerText = "ग्राहक का पता";
+                document.getElementById('btn-cust-cancel').innerText = "रद्द करें";
+                document.getElementById('btn-cust-save').innerText = "सेव करें";
+            } else {
+                document.getElementById('lbl-auth-user').innerText = "Email / Mobile Number";
+                document.getElementById('lbl-auth-pass').innerText = "Password";
+                document.getElementById('lbl-active-cust').innerText = "Active Customers";
+                document.getElementById('lbl-total-udhar-title').innerText = "Total Udhar (Due)";
+                document.getElementById('lbl-total-jama-title').innerText = "Total Jama (Received)";
+                document.getElementById('btn-add-cust').innerText = "Add Customer";
+                document.getElementById('btn-back').innerText = "Back";
+                document.getElementById('lbl-net-bal-title').innerText = "Net Due Balance";
+                document.getElementById('btn-diya-label').innerText = "₹ Given (Udhar)";
+                document.getElementById('btn-liya-label').innerText = "₹ Received (Jama)";
+                document.getElementById('btn-wa-entry').innerText = "Entry Slip";
+                document.getElementById('btn-wa-rem').innerText = "Reminder";
+                document.getElementById('btn-wa-ty').innerText = "Thank You";
+                document.getElementById('nav-lbl-home').innerText = "Home";
+                document.getElementById('nav-lbl-graph').innerText = "Reports Graph";
+                document.getElementById('nav-lbl-set').innerText = "Settings";
+                document.getElementById('lbl-cust-modal-title').innerText = "Add New Customer";
+                document.getElementById('lbl-c-name').innerText = "Customer Name";
+                document.getElementById('lbl-c-phone').innerText = "Customer Mobile Number";
+                document.getElementById('lbl-c-addr').innerText = "Customer Address";
+                document.getElementById('btn-cust-cancel').innerText = "Cancel";
+                document.getElementById('btn-cust-save').innerText = "Save";
+            }
+        };
+
+        window.checkSession();
+    </script>
+</body>
+</html>
