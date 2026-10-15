@@ -74,7 +74,7 @@
                 </button>
                 <div class="cursor-pointer" onclick="window.openProfileModal()">
                     <h1 class="text-sm md:text-base font-bold tracking-tight leading-none" id="shop-name-display">मेरी दुकान</h1>
-                    <p class="text-[10px] md:text-xs text-indigo-200 mt-0.5" id="owner-name-display">डिजिटल खाता बही</p>
+                    <p class="text-[10px] md:text-xs text-indigo-200 mt-0.5" id="owner-name-display">दुकानदार का नाम</p>
                 </div>
             </div>
             
@@ -89,7 +89,7 @@
         <!-- Main Workspace Area -->
         <main class="flex-grow overflow-y-auto p-4 md:p-6 relative space-y-4">
             
-            <!-- Auth Screen -->
+            <!-- Auth Screen (Login / Sign Up) -->
             <section id="auth-section" class="flex flex-col justify-center h-full py-2 max-w-md mx-auto">
                 <div class="fintech-card p-6 rounded-3xl shadow-2xl space-y-4">
                     <div class="text-center">
@@ -102,7 +102,7 @@
 
                     <div class="space-y-3">
                         <div>
-                            <label class="text-[11px] font-medium text-slate-400 mb-1 block" id="lbl-auth-user">ईमेल / मोबाइल नंबर</label>
+                            <label class="text-[11px] font-medium text-slate-400 mb-1 block" id="lbl-auth-user">यूजर आईडी / मोबाइल नंबर</label>
                             <input type="text" id="auth-user" placeholder="username / 9876543210" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-100 focus:outline-none focus:border-indigo-600">
                         </div>
                         <div>
@@ -112,7 +112,7 @@
                     </div>
 
                     <div class="flex justify-between items-center text-xs pt-1">
-                        <button type="button" onclick="window.toggleAuthMode()" id="auth-toggle-btn" class="text-indigo-400 font-semibold hover:underline">नया खाता बनाएं</button>
+                        <button type="button" onclick="window.toggleAuthMode()" id="auth-toggle-btn" class="text-indigo-400 font-semibold hover:underline">नया खाता बनाएं (Sign Up)</button>
                     </div>
 
                     <button type="button" id="auth-main-btn" onclick="window.handleAuth()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl text-xs font-bold shadow-lg shadow-indigo-600/30 transition">
@@ -206,12 +206,12 @@
                 <div id="ledger-entries-list" class="space-y-2"></div>
             </div>
 
-            <!-- Tab: Analytics Graph (UPDATED EXACT IMAGE MATCH DESIGN) -->
+            <!-- Tab: Analytics Graph -->
             <div id="tab-analytics" class="hidden space-y-4">
                 
                 <div class="space-y-1">
                     <h2 class="text-xl font-extrabold text-amber-500" id="lbl-monthly-hist">Monthly History</h2>
-                    <p class="text-xs text-slate-400" id="lbl-monthly-sub">Review your transactions by month</p>
+                    <p class="text-xs text-slate-400" id="lbl-monthly-sub">Review your transactions by month (Latest 5 Months)</p>
                 </div>
 
                 <!-- Grand Total Summary Card -->
@@ -252,11 +252,14 @@
                     </div>
                 </div>
 
-                <!-- Monthly Breakdown List -->
+                <!-- Monthly Breakdown List (Limited to Top 5 Months) -->
                 <div class="space-y-3 pt-1">
-                    <div class="flex items-center space-x-2 text-slate-200 font-bold text-sm">
-                        <i class="fa-solid fa-calendar-days text-amber-500"></i>
-                        <span id="lbl-m-breakdown">Monthly Breakdown</span>
+                    <div class="flex items-center justify-between text-slate-200 font-bold text-sm">
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-calendar-days text-amber-500"></i>
+                            <span id="lbl-m-breakdown">Monthly Breakdown</span>
+                        </div>
+                        <span class="text-[10px] text-amber-400/80 font-normal bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">Last 5 Months</span>
                     </div>
 
                     <div id="monthly-breakdown-container" class="space-y-3"></div>
@@ -297,22 +300,18 @@
             </div>
             <div>
                 <label class="text-[11px] text-slate-400 mb-1 block">दुकान का नाम</label>
-                <input type="text" id="p-shop-name" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-100">
+                <input type="text" id="p-shop-name" placeholder="उदा. मेरी दुकान" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-100">
             </div>
             <div>
                 <label class="text-[11px] text-slate-400 mb-1 block">दुकानदार का नाम</label>
-                <input type="text" id="p-owner-name" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-100">
+                <input type="text" id="p-owner-name" placeholder="उदा. आपका नाम" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-100">
             </div>
             <div>
                 <label class="text-[11px] text-slate-400 mb-1 block">प्रोफाइल फोटो / लोगो URL</label>
-                <input type="text" id="p-img-url" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-100">
+                <input type="text" id="p-img-url" placeholder="https://..." class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-100">
             </div>
             <div class="pt-2 border-t border-slate-800 space-y-2">
                 <p class="text-xs font-bold text-indigo-400"><i class="fa-solid fa-key mr-1"></i> पासवर्ड बदलें (Change Password)</p>
-                <div>
-                    <label class="text-[10px] text-slate-400 mb-1 block">यूजर आईडी / ईमेल</label>
-                    <input type="text" id="cp-user" placeholder="Current User ID" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-100">
-                </div>
                 <div>
                     <label class="text-[10px] text-slate-400 mb-1 block">वर्तमान पासवर्ड</label>
                     <input type="password" id="cp-old" placeholder="Old Password" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-100">
@@ -415,9 +414,12 @@
 
     <!-- App Logic Scripts -->
     <script>
-        let currentUser = JSON.parse(localStorage.getItem('udhar_user')) || null;
-        let shopProfile = JSON.parse(localStorage.getItem('udhar_profile')) || { name: 'मेरी दुकान', owner: 'श्रीकांत वर्मा', img: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png' };
-        let customers = JSON.parse(localStorage.getItem('udhar_db_cust')) || [];
+        // Multi-user Data Management System
+        let usersList = JSON.parse(localStorage.getItem('udhar_users_db')) || [];
+        let activeUserSession = JSON.parse(localStorage.getItem('udhar_active_session')) || null;
+
+        let shopProfile = { name: 'मेरी दुकान', owner: 'दुकानदार का नाम', img: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png' };
+        let customers = [];
         let activeCustomerId = null;
         let entryType = 'udhar';
         let chartInstance = null;
@@ -435,53 +437,118 @@
 
         window.toggleAuthMode = function() {
             const btn = document.getElementById('auth-toggle-btn');
-            const isSign = btn.innerText.includes("नया") || btn.innerText.includes("Create");
+            const isSign = btn.innerText.includes("Sign Up") || btn.innerText.includes("नया");
             if(isSign) {
-                document.getElementById('auth-heading').innerText = "नया खाता बनाएं";
+                document.getElementById('auth-heading').innerText = "नया खाता बनाएं (Sign Up)";
+                document.getElementById('auth-subheading').innerText = "अपना नया बहीखाता अकाउंट रजिस्टर करें";
                 btn.innerText = "पहले से खाता है? लॉगिन करें";
-                document.getElementById('auth-main-btn').innerText = "Sign Up करें";
+                document.getElementById('auth-main-btn').innerText = "खाता बनाएं (Register)";
             } else {
                 document.getElementById('auth-heading').innerText = "लॉगिन करें";
-                btn.innerText = "नया खाता बनाएं";
+                document.getElementById('auth-subheading').innerText = "अपने डिजिटल बहीखाते में प्रवेश करें";
+                btn.innerText = "नया खाता बनाएं (Sign Up)";
                 document.getElementById('auth-main-btn').innerText = "लॉगिन करें";
             }
         };
 
+        // Strict Authentic Login & Signup Handler
         window.handleAuth = function() {
-            const user = document.getElementById('auth-user').value.trim();
-            const pass = document.getElementById('auth-password').value.trim();
-            if(!user || !pass) { alert('कृपया नाम और पासवर्ड दर्ज करें'); return; }
+            const userVal = document.getElementById('auth-user').value.trim();
+            const passVal = document.getElementById('auth-password').value.trim();
+            const isSignUpMode = document.getElementById('auth-main-btn').innerText.includes("Register") || document.getElementById('auth-main-btn').innerText.includes("बनाएं");
 
-            currentUser = { username: user, password: pass };
-            localStorage.setItem('udhar_user', JSON.stringify(currentUser));
-            window.checkSession();
+            if(!userVal || !passVal) { 
+                alert('कृपया यूजर आईडी और पासवर्ड दोनों दर्ज करें!'); 
+                return; 
+            }
+
+            if(isSignUpMode) {
+                // SIGN UP LOGIC
+                const existingUser = usersList.find(u => u.username.toLowerCase() === userVal.toLowerCase());
+                if(existingUser) {
+                    alert('यह यूजर आईडी पहले से मौजूद है! कृपया कोई दूसरा नाम/नंबर चुनें या लॉगिन करें।');
+                    return;
+                }
+
+                const newUser = {
+                    username: userVal,
+                    password: passVal,
+                    profile: { name: 'मेरी दुकान', owner: 'दुकानदार का नाम', img: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png' },
+                    customers: []
+                };
+
+                usersList.push(newUser);
+                localStorage.setItem('udhar_users_db', JSON.stringify(usersList));
+                
+                activeUserSession = userVal;
+                localStorage.setItem('udhar_active_session', JSON.stringify(activeUserSession));
+
+                alert('खाता सफलतापूर्वक बन गया!');
+                document.getElementById('auth-user').value = '';
+                document.getElementById('auth-password').value = '';
+                window.checkSession();
+            } else {
+                // LOGIN LOGIC (STRICT MATCHING)
+                const matchedUser = usersList.find(u => u.username.toLowerCase() === userVal.toLowerCase() && u.password === passVal);
+
+                if(!matchedUser) {
+                    alert('गलत यूजर आईडी या पासवर्ड! कृपया सही विवरण दर्ज करें।');
+                    return;
+                }
+
+                activeUserSession = matchedUser.username;
+                localStorage.setItem('udhar_active_session', JSON.stringify(activeUserSession));
+
+                document.getElementById('auth-user').value = '';
+                document.getElementById('auth-password').value = '';
+                window.checkSession();
+            }
         };
 
         window.checkSession = function() {
-            if(currentUser) {
-                document.getElementById('auth-section').classList.add('hidden');
-                document.getElementById('app-dashboard').classList.remove('hidden');
-                document.getElementById('bottom-nav').classList.remove('hidden');
-                window.updateProfileDisplay();
-                window.renderDashboard();
-            } else {
-                document.getElementById('auth-section').classList.remove('hidden');
-                document.getElementById('app-dashboard').classList.add('hidden');
-                document.getElementById('bottom-nav').classList.add('hidden');
+            if(activeUserSession) {
+                const uData = usersList.find(u => u.username.toLowerCase() === activeUserSession.toLowerCase());
+                if(uData) {
+                    shopProfile = uData.profile || shopProfile;
+                    customers = uData.customers || [];
+
+                    document.getElementById('auth-section').classList.add('hidden');
+                    document.getElementById('app-dashboard').classList.remove('hidden');
+                    document.getElementById('bottom-nav').classList.remove('hidden');
+                    window.updateProfileDisplay();
+                    window.renderDashboard();
+                    return;
+                }
+            }
+
+            // Show Login screen if session not active
+            document.getElementById('auth-section').classList.remove('hidden');
+            document.getElementById('app-dashboard').classList.add('hidden');
+            document.getElementById('ledger-detail-view').classList.add('hidden');
+            document.getElementById('tab-analytics').classList.add('hidden');
+            document.getElementById('tab-settings').classList.add('hidden');
+            document.getElementById('bottom-nav').classList.add('hidden');
+        };
+
+        window.saveUserDataToDB = function() {
+            const userIndex = usersList.findIndex(u => u.username.toLowerCase() === activeUserSession.toLowerCase());
+            if(userIndex !== -1) {
+                usersList[userIndex].profile = shopProfile;
+                usersList[userIndex].customers = customers;
+                localStorage.setItem('udhar_users_db', JSON.stringify(usersList));
             }
         };
 
         window.updateProfileDisplay = function() {
-            document.getElementById('shop-name-display').innerText = shopProfile.name;
-            document.getElementById('owner-name-display').innerText = shopProfile.owner;
+            document.getElementById('shop-name-display').innerText = shopProfile.name || 'मेरी दुकान';
+            document.getElementById('owner-name-display').innerText = shopProfile.owner || 'दुकानदार का नाम';
             if(shopProfile.img) document.getElementById('shop-img-display').src = shopProfile.img;
         };
 
         window.openProfileModal = function() {
-            document.getElementById('p-shop-name').value = shopProfile.name;
-            document.getElementById('p-owner-name').value = shopProfile.owner;
+            document.getElementById('p-shop-name').value = shopProfile.name || '';
+            document.getElementById('p-owner-name').value = shopProfile.owner || '';
             document.getElementById('p-img-url').value = shopProfile.img || '';
-            if(currentUser) document.getElementById('cp-user').value = currentUser.username || '';
             document.getElementById('profile-modal').classList.remove('hidden');
         };
 
@@ -489,26 +556,28 @@
 
         window.saveProfileDetails = function() {
             shopProfile.name = document.getElementById('p-shop-name').value.trim() || 'मेरी दुकान';
-            shopProfile.owner = document.getElementById('p-owner-name').value.trim() || 'मालिक';
+            shopProfile.owner = document.getElementById('p-owner-name').value.trim() || 'दुकानदार का नाम';
             shopProfile.img = document.getElementById('p-img-url').value.trim() || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
-            localStorage.setItem('udhar_profile', JSON.stringify(shopProfile));
+            
+            window.saveUserDataToDB();
             window.updateProfileDisplay();
             window.closeProfileModal();
             alert("प्रोफाइल सफलतापूर्वक अपडेट हो गई!");
         };
 
         window.changeUserPassword = function() {
-            const userId = document.getElementById('cp-user').value.trim();
             const oldPass = document.getElementById('cp-old').value.trim();
             const newPass = document.getElementById('cp-new').value.trim();
             const confirmPass = document.getElementById('cp-confirm').value.trim();
 
-            if(!userId || !oldPass || !newPass || !confirmPass) {
+            if(!oldPass || !newPass || !confirmPass) {
                 alert('कृपया सभी पासवर्ड फील्ड भरें!');
                 return;
             }
 
-            if(currentUser && currentUser.password && currentUser.password !== oldPass) {
+            const currentUser = usersList.find(u => u.username.toLowerCase() === activeUserSession.toLowerCase());
+
+            if(currentUser && currentUser.password !== oldPass) {
                 alert('वर्तमान पासवर्ड गलत है!');
                 return;
             }
@@ -518,8 +587,9 @@
                 return;
             }
 
-            currentUser = { username: userId, password: newPass };
-            localStorage.setItem('udhar_user', JSON.stringify(currentUser));
+            currentUser.password = newPass;
+            window.saveUserDataToDB();
+
             alert('पासवर्ड सफलतापूर्वक बदल दिया गया है!');
             document.getElementById('cp-old').value = '';
             document.getElementById('cp-new').value = '';
@@ -528,9 +598,9 @@
         };
 
         window.logoutUser = function() {
-            localStorage.removeItem('udhar_user');
-            currentUser = null;
-            location.reload();
+            localStorage.removeItem('udhar_active_session');
+            activeUserSession = null;
+            window.checkSession();
         };
 
         window.renderDashboard = function() {
@@ -624,7 +694,7 @@
             };
 
             customers.push(newCust);
-            localStorage.setItem('udhar_db_cust', JSON.stringify(customers));
+            window.saveUserDataToDB();
             window.closeCustomerModal();
             document.getElementById('c-name').value = '';
             document.getElementById('c-phone').value = '';
@@ -657,7 +727,7 @@
             cust.phone = phone || 'N/A';
             cust.address = address || 'पता दर्ज नहीं है';
 
-            localStorage.setItem('udhar_db_cust', JSON.stringify(customers));
+            window.saveUserDataToDB();
             window.closeEditCustomerModal();
             window.renderLedgerDetail();
             alert('ग्राहक विवरण सफलतापूर्वक अपडेट हो गया!');
@@ -669,7 +739,7 @@
 
             if(confirm(`क्या आप सच में "${cust.name}" का खाता डिलीट करना चाहते हैं?`)) {
                 customers = customers.filter(c => c.id !== activeCustomerId);
-                localStorage.setItem('udhar_db_cust', JSON.stringify(customers));
+                window.saveUserDataToDB();
                 alert('खाता डिलीट हो गया!');
                 window.backToDashboard();
             }
@@ -738,7 +808,7 @@
 
             if(confirm("क्या आप इस गलत एंट्री को हटाना चाहते हैं?")) {
                 cust.entries = cust.entries.filter(e => e.id !== entryId);
-                localStorage.setItem('udhar_db_cust', JSON.stringify(customers));
+                window.saveUserDataToDB();
                 window.renderLedgerDetail();
             }
         };
@@ -776,10 +846,11 @@
                 type: entryType,
                 amount: amount,
                 desc: desc || (entryType === 'udhar' ? 'उधार सामान' : 'नकद भुगतान'),
-                date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+                timestamp: Date.now()
             });
 
-            localStorage.setItem('udhar_db_cust', JSON.stringify(customers));
+            window.saveUserDataToDB();
             window.closeEntryModal();
             document.getElementById('e-amount').value = '';
             document.getElementById('e-desc').value = '';
@@ -845,7 +916,7 @@
             else if(tab === 'settings') document.getElementById('tab-settings').classList.remove('hidden');
         };
 
-        // Complete Image-Matched Analytics & Reports Generator
+        // Render Analytics & Reports Generator
         window.renderAnalyticsTab = function() {
             let totalLent = 0;
             let totalReceived = 0;
@@ -859,14 +930,14 @@
                 if(cust.entries) {
                     cust.entries.forEach(e => {
                         const amt = Number(e.amount) || 0;
-                        const dateObj = new Date(e.date);
+                        const dateObj = new Date(e.timestamp || e.date);
                         let mIndex = dateObj.getMonth();
                         if(isNaN(mIndex)) mIndex = new Date().getMonth();
 
                         const mKey = dateObj.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
                         if(!monthMap[mKey]) {
-                            monthMap[mKey] = { lent: 0, rec: 0, count: 0 };
+                            monthMap[mKey] = { lent: 0, rec: 0, count: 0, time: dateObj.getTime() || Date.now() };
                         }
                         monthMap[mKey].count++;
 
@@ -889,7 +960,7 @@
             document.getElementById('report-grand-rec').innerText = `₹${totalReceived.toLocaleString('en-IN')}`;
             document.getElementById('report-grand-notrec').innerText = `₹${totalNotReceived.toLocaleString('en-IN')}`;
 
-            // Render Exact Screenshot Matched Chart
+            // Render Exact Chart
             const ctx = document.getElementById('monthlyChart').getContext('2d');
             if(chartInstance) chartInstance.destroy();
 
@@ -953,17 +1024,20 @@
                 }
             });
 
-            // Render Monthly Breakdown List
+            // Render Monthly Breakdown List (Limited to Top 5 Months)
             const breakdownContainer = document.getElementById('monthly-breakdown-container');
             breakdownContainer.innerHTML = '';
 
-            const monthKeys = Object.keys(monthMap);
-            if(monthKeys.length === 0) {
+            const sortedMonths = Object.keys(monthMap).sort((a, b) => monthMap[b].time - monthMap[a].time);
+
+            if(sortedMonths.length === 0) {
                 breakdownContainer.innerHTML = '<p class="text-xs text-slate-500 text-center py-4">कोई मासिक डेटा उपलब्ध नहीं है।</p>';
                 return;
             }
 
-            monthKeys.forEach(mKey => {
+            const top5Months = sortedMonths.slice(0, 5);
+
+            top5Months.forEach(mKey => {
                 const item = monthMap[mKey];
                 const notRec = item.lent - item.rec;
 
@@ -1014,8 +1088,7 @@
                 if(data.customers) {
                     customers = data.customers;
                     if(data.shopProfile) shopProfile = data.shopProfile;
-                    localStorage.setItem('udhar_db_cust', JSON.stringify(customers));
-                    localStorage.setItem('udhar_profile', JSON.stringify(shopProfile));
+                    window.saveUserDataToDB();
                     window.updateProfileDisplay();
                     window.renderDashboard();
                     alert("डेटा सफलतापूर्वक रिस्टोर हो गया!");
@@ -1026,7 +1099,7 @@
 
         window.changeLanguage = function(lang) {
             if(lang === 'hi') {
-                document.getElementById('lbl-auth-user').innerText = "ईमेल / मोबाइल नंबर";
+                document.getElementById('lbl-auth-user').innerText = "यूजर आईडी / मोबाइल नंबर";
                 document.getElementById('lbl-auth-pass').innerText = "पासवर्ड";
                 document.getElementById('lbl-active-cust').innerText = "कुल सक्रिय ग्राहक";
                 document.getElementById('lbl-total-udhar-title').innerText = "कुल बकाया (Total Udhar)";
@@ -1040,7 +1113,7 @@
                 document.getElementById('nav-lbl-graph').innerText = "रिपोर्ट्स";
                 document.getElementById('nav-lbl-set').innerText = "सेटिंग्स";
                 document.getElementById('lbl-monthly-hist').innerText = "मासिक इतिहास (Monthly History)";
-                document.getElementById('lbl-monthly-sub').innerText = "महीने के अनुसार अपने लेन-देन देखें";
+                document.getElementById('lbl-monthly-sub').innerText = "महीने के अनुसार अपने लेन-देन देखें (नवीनतम 5 महीने)";
                 document.getElementById('lbl-grand-summary').innerText = "कुल सारांश (Grand Total Summary)";
                 document.getElementById('lbl-m-lent').innerText = "कुल दिया गया उधार (MONEY LENT)";
                 document.getElementById('lbl-m-rec').innerText = "कुल मिली वसूली (MONEY RECEIVED)";
@@ -1049,7 +1122,7 @@
                 document.getElementById('lbl-trend-sub').innerText = "समय के साथ उधार vs जमा";
                 document.getElementById('lbl-m-breakdown').innerText = "मासिक विवरण (Monthly Breakdown)";
             } else {
-                document.getElementById('lbl-auth-user').innerText = "Email / Mobile Number";
+                document.getElementById('lbl-auth-user').innerText = "User ID / Mobile Number";
                 document.getElementById('lbl-auth-pass').innerText = "Password";
                 document.getElementById('lbl-active-cust').innerText = "Active Customers";
                 document.getElementById('lbl-total-udhar-title').innerText = "Total Udhar (Due)";
@@ -1063,7 +1136,7 @@
                 document.getElementById('nav-lbl-graph').innerText = "Reports";
                 document.getElementById('nav-lbl-set').innerText = "Settings";
                 document.getElementById('lbl-monthly-hist').innerText = "Monthly History";
-                document.getElementById('lbl-monthly-sub').innerText = "Review your transactions by month";
+                document.getElementById('lbl-monthly-sub').innerText = "Review your transactions by month (Latest 5 Months)";
                 document.getElementById('lbl-grand-summary').innerText = "Grand Total Summary";
                 document.getElementById('lbl-m-lent').innerText = "TOTAL MONEY LENT";
                 document.getElementById('lbl-m-rec').innerText = "TOTAL MONEY RECEIVED";
